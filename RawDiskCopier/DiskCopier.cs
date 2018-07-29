@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2017 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
+/* Copyright (C) 2016-2018 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
  * 
  * You can redistribute this program and/or modify it under the terms of
  * the GNU Lesser Public License as published by the Free Software Foundation,
@@ -27,7 +27,7 @@ namespace RawDiskCopier
             bool crcErrorOccured = false;
             for (long sectorOffset = 0; sectorOffset < sectorCount; sectorOffset += PhysicalDisk.MaximumDirectTransferSizeLBA)
             {
-                int leftToRead = (int)(sectorCount - sectorOffset);
+                long leftToRead = sectorCount - sectorOffset;
                 int sectorsToRead = (int)Math.Min(leftToRead, PhysicalDisk.MaximumDirectTransferSizeLBA);
                 bool ioErrorOccured;
                 // Clear allocations from previous iteration
@@ -86,7 +86,7 @@ namespace RawDiskCopier
             bool crcErrorOccured = false;
             for (long sectorOffset = 0; sectorOffset < sectorCount; sectorOffset += PhysicalDisk.MaximumDirectTransferSizeLBA)
             {
-                int leftToRead = (int)(sectorCount - sectorOffset);
+                long leftToRead = sectorCount - sectorOffset;
                 int sectorsToRead = (int)Math.Min(leftToRead, PhysicalDisk.MaximumDirectTransferSizeLBA);
                 List<long> damagedSectors;
                 bool ioErrorOccured;
