@@ -41,6 +41,11 @@ namespace RawDiskCopier
 
                 if (ioErrorOccured)
                 {
+                    long nextOffset = sectorOffset + sectorsToRead;
+                    if (sectorCount - nextOffset > 0)
+                    {
+                        AddToLog("Skipped {0:###,###,###,###,##0}-{1:###,###,###,###,##0}", sectorIndex + nextOffset, sectorIndex + sectorCount - 1);
+                    }
                     return BlockStatus.IOError;
                 }
 

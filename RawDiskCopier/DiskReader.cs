@@ -43,6 +43,11 @@ namespace RawDiskCopier
                     byte[] segment = ReadSectorsUnbuffered(sectorIndex + sectorOffset, sectorsToRead, out ioErrorOccured);
                     if (m_abort || ioErrorOccured || segment == null)
                     {
+                        long nextOffset = sectorOffset + sectorsToRead;
+                        if ((ioErrorOccured || segment == null) && (sectorCount - nextOffset > 0))
+                        {
+                            AddToLog("Skipped {0:###,###,###,###,##0}-{1:###,###,###,###,##0}", sectorIndex + nextOffset, sectorIndex + sectorCount - 1);
+                        }
                         return null;
                     }
                     Array.Copy(segment, 0, buffer, sectorOffset * m_disk.BytesPerSector, segment.Length);
@@ -77,7 +82,7 @@ namespace RawDiskCopier
             }
         }
 
-        /// <returns>Will return null if unrecoverable IOError has occured or read is aborted</returns>
+        /// <returns>Will return null if an unrecoverable IO Error has occured or read is aborted</returns>
         public byte[] ReadEverySector(long sectorIndex, int sectorCount, out List<long> damagedSectors, out bool ioErrorOccured)
         {
             if (sectorCount > PhysicalDisk.MaximumDirectTransferSizeLBA)
@@ -113,7 +118,7 @@ namespace RawDiskCopier
             }
         }
 
-        /// <returns>Will return null if unrecoverable IOError has occured or read is aborted</returns>
+        /// <returns>Will return null if an unrecoverable IO Error has occured or read is aborted</returns>
         public byte[] ReadEverySectorUnbuffered(long sectorIndex, int sectorCount, out List<long> damagedSectors, out bool ioErrorOccured)
         {
             damagedSectors = new List<long>();
