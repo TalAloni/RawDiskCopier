@@ -86,7 +86,7 @@ namespace RawDiskCopier
             }
         }
 
-        public BlockStatus ThroughCopy(long sectorIndex, long sectorCount)
+        public BlockStatus ThroughCopy(long sectorIndex, long sectorCount, bool writeZeros)
         {
             bool crcErrorOccured = false;
             for (long sectorOffset = 0; sectorOffset < sectorCount; sectorOffset += PhysicalDisk.MaximumDirectTransferSizeLBA)
@@ -116,7 +116,14 @@ namespace RawDiskCopier
 
                 try
                 {
-                    WriteSectors(sectorIndex + sectorOffset, data);
+                    if (writeZeros || damagedSectors.Count == 0)
+                    {
+                        WriteSectors(sectorIndex + sectorOffset, data);
+                    }
+                    else
+                    {
+                        WriteSectors(sectorIndex + sectorOffset, data, damagedSectors);
+                    }
                 }
                 catch (IOException)
                 {
@@ -157,6 +164,19 @@ namespace RawDiskCopier
             else
             {
                 m_targetDisk.WriteSectors(sectorIndex, data);
+            }
+        }
+
+        public void WriteSectors(long sectorIndex, byte[] data, List<long> sectorsToSkip)
+        {
+            int sectorCount = data.Length / m_targetDisk.BytesPerSector;
+            for (int sectorOffset = 0; sectorOffset < sectorCount; sectorOffset += 1)
+            {
+                byte[] sectorBytes = ByteReader.ReadBytes(data, sectorOffset * m_targetDisk.BytesPerSector, m_targetDisk.BytesPerSector);
+                if (!sectorsToSkip.Contains(sectorIndex + sectorOffset))
+                {
+                    m_targetDisk.WriteSectors(sectorIndex + sectorOffset, sectorBytes);
+                }
             }
         }
 

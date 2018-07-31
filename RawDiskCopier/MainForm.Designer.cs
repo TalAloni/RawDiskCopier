@@ -213,7 +213,6 @@ namespace RawDiskCopier
             this.toolTipMain.SetToolTip(this.chkMaximizeDataRecovery, "If a bulk read operation fails due to damaged sectors, attempt reading sector by " +
                     "sector ");
             this.chkMaximizeDataRecovery.UseVisualStyleBackColor = true;
-            this.chkMaximizeDataRecovery.CheckedChanged += new System.EventHandler(this.chkMaximizeDataRecovery_CheckedChanged);
             // 
             // groupOptions
             // 

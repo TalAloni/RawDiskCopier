@@ -289,7 +289,7 @@ namespace RawDiskCopier
                 BlockStatus blockStatus;
                 if (chkMaximizeDataRecovery.Checked)
                 {
-                    blockStatus = m_diskCopier.ThroughCopy(sectorIndex, sectorCount);
+                    blockStatus = m_diskCopier.ThroughCopy(sectorIndex, sectorCount, chkWriteZeros.Checked);
                 }
                 else
                 {
@@ -368,15 +368,6 @@ namespace RawDiskCopier
         {
             string messageFormatted = String.Format("{0}: {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), message);
             m_log.Add(messageFormatted);
-        }
-
-        private void chkMaximizeDataRecovery_CheckedChanged(object sender, EventArgs e)
-        {
-            chkWriteZeros.Enabled = !chkMaximizeDataRecovery.Checked;
-            if (!chkWriteZeros.Enabled)
-            {
-                chkWriteZeros.Checked = true;
-            }
         }
     }
 }
