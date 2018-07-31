@@ -144,7 +144,7 @@ namespace RawDiskCopier
             int sectorCount = data.Length / m_targetDisk.BytesPerSector;
             if (sectorCount > PhysicalDisk.MaximumDirectTransferSizeLBA)
             {
-                // we must write one segment at the time
+                // We must write one segment at a time
                 for (int sectorOffset = 0; sectorOffset < sectorCount; sectorOffset += PhysicalDisk.MaximumDirectTransferSizeLBA)
                 {
                     int leftToWrite = sectorCount - sectorOffset;
