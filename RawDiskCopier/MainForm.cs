@@ -1,4 +1,4 @@
-/* Copyright (C) 2016 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
+/* Copyright (C) 2016-2018 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
  * 
  * You can redistribute this program and/or modify it under the terms of
  * the GNU Lesser Public License as published by the Free Software Foundation,
@@ -183,7 +183,9 @@ namespace RawDiskCopier
                 Thread thread = new Thread(delegate()
                 {
                     m_isBusy = true;
-                    CopyDisk(sourceDiskIndex, targetDiskIndex);
+                    PhysicalDisk sourceDisk = new PhysicalDisk(sourceDiskIndex);
+                    PhysicalDisk targetDisk = new PhysicalDisk(targetDiskIndex);
+                    CopyDisk(sourceDisk, targetDisk);
                     m_isBusy = false;
                     if (m_isClosing)
                     {
@@ -207,10 +209,8 @@ namespace RawDiskCopier
             }
         }
 
-        private void CopyDisk(int sourceDiskIndex, int targetDiskIndex)
+        private void CopyDisk(Disk sourceDisk, Disk targetDisk)
         {
-            PhysicalDisk sourceDisk = new PhysicalDisk(sourceDiskIndex);
-            PhysicalDisk targetDisk = new PhysicalDisk(targetDiskIndex);
             if (sourceDisk.BytesPerSector != targetDisk.BytesPerSector)
             {
                 MessageBox.Show("The target disk has different sector size than the source disk", "Error");
@@ -226,36 +226,61 @@ namespace RawDiskCopier
                 }
             }
 
-            DialogResult dialogResult = MessageBox.Show("The copy operation will erase all existing data on the selected disk, Are you sure?", "Warning", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.No)
+            if (targetDisk is PhysicalDisk)
             {
-                return;
+                DialogResult dialogResult = MessageBox.Show("The copy operation will erase all existing data on the selected disk, Are you sure?", "Warning", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.No)
+                {
+                    return;
+                }
             }
 
             m_startTime = DateTime.Now;
             ClearLog();
             AddToLog("Raw Disk Copier {0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
-            AddToLog("Source disk: {0}, S/N: {1}", sourceDisk.Description, sourceDisk.SerialNumber);
-            AddToLog("Target disk: {0}, S/N: {1}", targetDisk.Description, targetDisk.SerialNumber);
+            if (sourceDisk is PhysicalDisk)
+            {
+                AddToLog("Source disk: {0}, S/N: {1}", ((PhysicalDisk)sourceDisk).Description, ((PhysicalDisk)sourceDisk).SerialNumber);
+            }
+            else if (targetDisk is VirtualHardDisk)
+            {
+                AddToLog("Target disk: {0}", ((VirtualHardDisk)sourceDisk).Path);
+            }
+
+            if (targetDisk is PhysicalDisk)
+            {
+                AddToLog("Target disk: {0}, S/N: {1}", ((PhysicalDisk)targetDisk).Description, ((PhysicalDisk)targetDisk).SerialNumber);
+            }
+            else if (targetDisk is VirtualHardDisk)
+            {
+                AddToLog("Target disk: {0}", ((VirtualHardDisk)targetDisk).Path);
+            }
             AddToLog("Source disk size: {0} ({1:###,###,###,###,##0} sectors, {2} bytes per sector)", UIHelper.GetSizeString(sourceDisk.Size), sourceDisk.TotalSectors, sourceDisk.BytesPerSector);
             AddToLog("Target disk size: {0} ({1:###,###,###,###,##0} sectors, {2} bytes per sector)", UIHelper.GetSizeString(targetDisk.Size), targetDisk.TotalSectors, targetDisk.BytesPerSector);
 
-            bool success = targetDisk.ExclusiveLock();
-            if (!success)
+            if (targetDisk is PhysicalDisk)
             {
-                MessageBox.Show("Failed to lock the target disk.");
-                return;
-            }
-
-            if (Environment.OSVersion.Version.Major >= 6)
-            {
-                success = targetDisk.SetOnlineStatus(false, false);
+                bool success = ((PhysicalDisk)targetDisk).ExclusiveLock();
                 if (!success)
                 {
-                    targetDisk.ReleaseLock();
-                    MessageBox.Show("Failed to take the target disk offline.");
+                    MessageBox.Show("Failed to lock the target disk.");
                     return;
                 }
+
+                if (Environment.OSVersion.Version.Major >= 6)
+                {
+                    success = ((PhysicalDisk)targetDisk).SetOnlineStatus(false, false);
+                    if (!success)
+                    {
+                        ((PhysicalDisk)targetDisk).ReleaseLock();
+                        MessageBox.Show("Failed to take the target disk offline.");
+                        return;
+                    }
+                }
+            }
+            else if (targetDisk is VirtualHardDisk)
+            {
+                ((VirtualHardDisk)targetDisk).ExclusiveLock();
             }
 
             m_diskCopier = new DiskCopier(sourceDisk, targetDisk);
@@ -312,14 +337,21 @@ namespace RawDiskCopier
                 }
             }
 
-            if (Environment.OSVersion.Version.Major >= 6)
+            if (targetDisk is PhysicalDisk)
             {
-                targetDisk.SetOnlineStatus(true, false);
+                if (Environment.OSVersion.Version.Major >= 6)
+                {
+                    ((PhysicalDisk)targetDisk).SetOnlineStatus(true, false);
+                }
+                ((PhysicalDisk)targetDisk).ReleaseLock();
+                if (chkInvalidateWindowsCache.Checked)
+                {
+                    ((PhysicalDisk)targetDisk).UpdateProperties();
+                }
             }
-            targetDisk.ReleaseLock();
-            if (chkInvalidateWindowsCache.Checked)
+            else if (targetDisk is VirtualHardDisk)
             {
-                targetDisk.UpdateProperties();
+                ((VirtualHardDisk)targetDisk).ReleaseLock();
             }
 
             if (m_diskCopier.Abort)
