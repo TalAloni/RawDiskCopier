@@ -85,15 +85,45 @@ namespace RawDiskCopier
         private void comboSourceDisk_SelectedIndexChanged(object sender, EventArgs e)
         {
             int physicalDiskIndex = ((KeyValuePair<int, string>)comboSourceDisk.SelectedItem).Key;
-            PhysicalDisk disk = new PhysicalDisk(physicalDiskIndex);
-            lblSourceDiskSerialNumber.Text = "S/N: " + disk.SerialNumber;
+            PhysicalDisk disk = null;
+            try
+            {
+                disk = new PhysicalDisk(physicalDiskIndex);
+            }
+            catch (DriveNotFoundException)
+            {
+            }
+
+            if (disk != null)
+            {
+                lblSourceDiskSerialNumber.Text = "S/N: " + disk.SerialNumber;
+            }
+            else
+            {
+                lblSourceDiskSerialNumber.Text = "Error: Disk not found";
+            }
         }
 
         private void comboTargetDisk_SelectedIndexChanged(object sender, EventArgs e)
         {
             int physicalDiskIndex = ((KeyValuePair<int, string>)comboTargetDisk.SelectedItem).Key;
-            PhysicalDisk disk = new PhysicalDisk(physicalDiskIndex);
-            lblTargetDiskSerialNumber.Text = "S/N: " + disk.SerialNumber;
+            PhysicalDisk disk = null;
+            try
+            {
+                disk = new PhysicalDisk(physicalDiskIndex);
+            }
+            catch (DriveNotFoundException)
+            {
+            }
+
+            if (disk != null)
+            {
+                lblTargetDiskSerialNumber.Text = "S/N: " + disk.SerialNumber;
+            }
+            else
+            {
+                lblTargetDiskSerialNumber.Text = "Error: Disk not found";
+            }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -173,12 +203,31 @@ namespace RawDiskCopier
                 }
                 int sourceDiskIndex = ((KeyValuePair<int, string>)comboSourceDisk.SelectedItem).Key;
                 int targetDiskIndex = ((KeyValuePair<int, string>)comboTargetDisk.SelectedItem).Key;
+                PhysicalDisk sourceDisk;
+                PhysicalDisk targetDisk;
+                try
+                {
+                    sourceDisk = new PhysicalDisk(sourceDiskIndex);
+                }
+                catch (DriveNotFoundException)
+                {
+                    MessageBox.Show("Source disk not found", "Error");
+                    return;
+                }
+
+                try
+                {
+                    targetDisk = new PhysicalDisk(targetDiskIndex);
+                }
+                catch (DriveNotFoundException)
+                {
+                    MessageBox.Show("Target disk not found", "Error");
+                    return;
+                }
                 DisableUI();
                 Thread thread = new Thread(delegate()
                 {
                     m_isBusy = true;
-                    PhysicalDisk sourceDisk = new PhysicalDisk(sourceDiskIndex);
-                    PhysicalDisk targetDisk = new PhysicalDisk(targetDiskIndex);
                     CopyDisk(sourceDisk, targetDisk);
                     m_isBusy = false;
                     if (m_isClosing)
