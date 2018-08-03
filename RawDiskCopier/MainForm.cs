@@ -158,11 +158,8 @@ namespace RawDiskCopier
                     {
                         this.Invoke((MethodInvoker)delegate
                         {
-                            btnStart.Text = "Start";
+                            EnableUI();
                             btnStart.Enabled = true;
-                            comboSourceDisk.Enabled = true;
-                            comboTargetDisk.Enabled = true;
-                            groupOptions.Enabled = true;
                         });
                     }
                 });
@@ -176,10 +173,7 @@ namespace RawDiskCopier
                 }
                 int sourceDiskIndex = ((KeyValuePair<int, string>)comboSourceDisk.SelectedItem).Key;
                 int targetDiskIndex = ((KeyValuePair<int, string>)comboTargetDisk.SelectedItem).Key;
-                btnStart.Text = "Stop";
-                comboSourceDisk.Enabled = false;
-                comboTargetDisk.Enabled = false;
-                groupOptions.Enabled = false;
+                DisableUI();
                 Thread thread = new Thread(delegate()
                 {
                     m_isBusy = true;
@@ -198,15 +192,28 @@ namespace RawDiskCopier
                     {
                         this.Invoke((MethodInvoker)delegate
                         {
-                            btnStart.Text = "Start";
-                            comboSourceDisk.Enabled = true;
-                            comboTargetDisk.Enabled = true;
-                            groupOptions.Enabled = true;
+                            EnableUI();
                         });
                     }
                 });
                 thread.Start();
             }
+        }
+
+        private void EnableUI()
+        {
+            btnStart.Text = "Start";
+            comboSourceDisk.Enabled = true;
+            comboTargetDisk.Enabled = true;
+            groupOptions.Enabled = true;
+        }
+
+        private void DisableUI()
+        {
+            btnStart.Text = "Stop";
+            comboSourceDisk.Enabled = false;
+            comboTargetDisk.Enabled = false;
+            groupOptions.Enabled = false;
         }
 
         private void CopyDisk(Disk sourceDisk, Disk targetDisk)
