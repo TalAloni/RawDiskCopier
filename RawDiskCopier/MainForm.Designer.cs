@@ -50,6 +50,7 @@ namespace RawDiskCopier
             this.chkWriteZeros = new System.Windows.Forms.CheckBox();
             this.chkInvalidateWindowsCache = new System.Windows.Forms.CheckBox();
             this.toolTipMain = new System.Windows.Forms.ToolTip(this.components);
+            this.saveVirtualDiskFileDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).BeginInit();
             this.groupProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLegend)).BeginInit();
@@ -251,6 +252,11 @@ namespace RawDiskCopier
             this.toolTipMain.SetToolTip(this.chkInvalidateWindowsCache, "Invalidate the cached partition table and re-enumerates the device on completion");
             this.chkInvalidateWindowsCache.UseVisualStyleBackColor = true;
             // 
+            // saveVirtualDiskFileDialog
+            // 
+            this.saveVirtualDiskFileDialog.FileName = "DiskCopy.vhd";
+            this.saveVirtualDiskFileDialog.Filter = "Virtual Hard Disk (*.vhd)|*.vhd";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -311,6 +317,7 @@ namespace RawDiskCopier
         private System.Windows.Forms.CheckBox chkInvalidateWindowsCache;
         private System.Windows.Forms.CheckBox chkWriteZeros;
         private System.Windows.Forms.ToolTip toolTipMain;
+        private System.Windows.Forms.SaveFileDialog saveVirtualDiskFileDialog;
     }
 }
 

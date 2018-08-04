@@ -107,22 +107,37 @@ namespace RawDiskCopier
         private void comboTargetDisk_SelectedIndexChanged(object sender, EventArgs e)
         {
             int physicalDiskIndex = ((KeyValuePair<int, string>)comboTargetDisk.SelectedItem).Key;
-            PhysicalDisk disk = null;
-            try
+            if (physicalDiskIndex == -1) // VHD
             {
-                disk = new PhysicalDisk(physicalDiskIndex);
-            }
-            catch (DriveNotFoundException)
-            {
-            }
-
-            if (disk != null)
-            {
-                lblTargetDiskSerialNumber.Text = "S/N: " + disk.SerialNumber;
+                DialogResult openFileResult = saveVirtualDiskFileDialog.ShowDialog();
+                if (openFileResult != DialogResult.OK)
+                {
+                    comboTargetDisk.SelectedIndex = 0;
+                }
+                else
+                {
+                    lblTargetDiskSerialNumber.Text = saveVirtualDiskFileDialog.FileName;
+                }
             }
             else
             {
-                lblTargetDiskSerialNumber.Text = "Error: Disk not found";
+                PhysicalDisk disk = null;
+                try
+                {
+                    disk = new PhysicalDisk(physicalDiskIndex);
+                }
+                catch (DriveNotFoundException)
+                {
+                }
+
+                if (disk != null)
+                {
+                    lblTargetDiskSerialNumber.Text = "S/N: " + disk.SerialNumber;
+                }
+                else
+                {
+                    lblTargetDiskSerialNumber.Text = "Error: Disk not found";
+                }
             }
         }
 
@@ -162,6 +177,11 @@ namespace RawDiskCopier
                     {
                         string title = String.Format("[{0}] {1} ({2})", disk.PhysicalDiskIndex, disk.Description,  UIHelper.GetSizeString(disk.Size));
                         comboBox.Items.Add(new KeyValuePair<int, string>(disk.PhysicalDiskIndex, title));
+                    }
+
+                    if (comboBox == comboTargetDisk)
+                    {
+                        comboBox.Items.Add(new KeyValuePair<int, string>(-1, "Virtual Hard Disk"));
                     }
                     comboBox.SelectedIndex = 0;
                     comboBox.Enabled = true;
@@ -204,7 +224,7 @@ namespace RawDiskCopier
                 int sourceDiskIndex = ((KeyValuePair<int, string>)comboSourceDisk.SelectedItem).Key;
                 int targetDiskIndex = ((KeyValuePair<int, string>)comboTargetDisk.SelectedItem).Key;
                 PhysicalDisk sourceDisk;
-                PhysicalDisk targetDisk;
+                Disk targetDisk = null;
                 try
                 {
                     sourceDisk = new PhysicalDisk(sourceDiskIndex);
@@ -215,14 +235,37 @@ namespace RawDiskCopier
                     return;
                 }
 
-                try
+                if (targetDiskIndex == -1)
                 {
-                    targetDisk = new PhysicalDisk(targetDiskIndex);
+                    string path = saveVirtualDiskFileDialog.FileName; ;
+                    try
+                    {
+                        if (chkWriteZeros.Checked)
+                        {
+                            targetDisk = VirtualHardDisk.CreateFixedDisk(path, sourceDisk.Size);
+                        }
+                        else
+                        {
+                            targetDisk = VirtualHardDisk.CreateDynamicDisk(path, sourceDisk.Size);
+                        }
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show("Failed to create the virtual disk: " + ex.Message, "Error");
+                        return;
+                    }
                 }
-                catch (DriveNotFoundException)
+                else
                 {
-                    MessageBox.Show("Target disk not found", "Error");
-                    return;
+                    try
+                    {
+                        targetDisk = new PhysicalDisk(targetDiskIndex);
+                    }
+                    catch (DriveNotFoundException)
+                    {
+                        MessageBox.Show("Target disk not found", "Error");
+                        return;
+                    }
                 }
                 DisableUI();
                 Thread thread = new Thread(delegate()
