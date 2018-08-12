@@ -85,22 +85,37 @@ namespace RawDiskCopier
         private void comboSourceDisk_SelectedIndexChanged(object sender, EventArgs e)
         {
             int physicalDiskIndex = ((KeyValuePair<int, string>)comboSourceDisk.SelectedItem).Key;
-            PhysicalDisk disk = null;
-            try
+            if (physicalDiskIndex == -1) // VHD
             {
-                disk = new PhysicalDisk(physicalDiskIndex);
-            }
-            catch (DriveNotFoundException)
-            {
-            }
-
-            if (disk != null)
-            {
-                lblSourceDiskSerialNumber.Text = "S/N: " + disk.SerialNumber;
+                DialogResult openFileResult = openVirtualDiskFileDialog.ShowDialog();
+                if (openFileResult != DialogResult.OK)
+                {
+                    comboSourceDisk.SelectedIndex = 0;
+                }
+                else
+                {
+                    lblSourceDiskSerialNumber.Text = openVirtualDiskFileDialog.FileName;
+                }
             }
             else
             {
-                lblSourceDiskSerialNumber.Text = "Error: Disk not found";
+                PhysicalDisk disk = null;
+                try
+                {
+                    disk = new PhysicalDisk(physicalDiskIndex);
+                }
+                catch (DriveNotFoundException)
+                {
+                }
+
+                if (disk != null)
+                {
+                    lblSourceDiskSerialNumber.Text = "S/N: " + disk.SerialNumber;
+                }
+                else
+                {
+                    lblSourceDiskSerialNumber.Text = "Error: Disk not found";
+                }
             }
         }
 
@@ -179,10 +194,7 @@ namespace RawDiskCopier
                         comboBox.Items.Add(new KeyValuePair<int, string>(disk.PhysicalDiskIndex, title));
                     }
 
-                    if (comboBox == comboTargetDisk)
-                    {
-                        comboBox.Items.Add(new KeyValuePair<int, string>(-1, "Virtual Hard Disk"));
-                    }
+                    comboBox.Items.Add(new KeyValuePair<int, string>(-1, "Virtual Hard Disk"));
                     comboBox.SelectedIndex = 0;
                     comboBox.Enabled = true;
                 });
@@ -223,16 +235,33 @@ namespace RawDiskCopier
                 }
                 int sourceDiskIndex = ((KeyValuePair<int, string>)comboSourceDisk.SelectedItem).Key;
                 int targetDiskIndex = ((KeyValuePair<int, string>)comboTargetDisk.SelectedItem).Key;
-                PhysicalDisk sourceDisk;
+                Disk sourceDisk = null;
                 Disk targetDisk = null;
-                try
+                if (sourceDiskIndex == -1)
                 {
-                    sourceDisk = new PhysicalDisk(sourceDiskIndex);
+                    string path = openVirtualDiskFileDialog.FileName;
+                    try
+                    {
+                        sourceDisk = new VirtualHardDisk(path);
+                        sourceDisk.IsReadOnly = true;
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show("Failed to open the virtual disk: " + ex.Message, "Error");
+                        return;
+                    }
                 }
-                catch (DriveNotFoundException)
+                else
                 {
-                    MessageBox.Show("Source disk not found", "Error");
-                    return;
+                    try
+                    {
+                        sourceDisk = new PhysicalDisk(sourceDiskIndex);
+                    }
+                    catch (DriveNotFoundException)
+                    {
+                        MessageBox.Show("Source disk not found", "Error");
+                        return;
+                    }
                 }
 
                 if (targetDiskIndex == -1)
