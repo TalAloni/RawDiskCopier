@@ -242,8 +242,7 @@ namespace RawDiskCopier
                     string path = openVirtualDiskFileDialog.FileName;
                     try
                     {
-                        sourceDisk = new VirtualHardDisk(path);
-                        sourceDisk.IsReadOnly = true;
+                        sourceDisk = new VirtualHardDisk(path, true);
                     }
                     catch (IOException ex)
                     {
