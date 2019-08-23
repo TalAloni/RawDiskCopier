@@ -64,7 +64,7 @@ namespace RawDiskCopier
             this.pictureBoxMap.Location = new System.Drawing.Point(6, 79);
             this.pictureBoxMap.Name = "pictureBoxMap";
             this.pictureBoxMap.Size = new System.Drawing.Size(350, 14);
-            this.pictureBoxMap.TabIndex = 0;
+            this.pictureBoxMap.TabIndex = 6;
             this.pictureBoxMap.TabStop = false;
             this.pictureBoxMap.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxMap_Paint);
             // 
@@ -73,7 +73,7 @@ namespace RawDiskCopier
             this.btnStart.Location = new System.Drawing.Point(362, 75);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
-            this.btnStart.TabIndex = 6;
+            this.btnStart.TabIndex = 7;
             this.btnStart.Text = "Start";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
@@ -95,7 +95,7 @@ namespace RawDiskCopier
             this.lblSourceDiskSerialNumber.Location = new System.Drawing.Point(366, 11);
             this.lblSourceDiskSerialNumber.Name = "lblSourceDiskSerialNumber";
             this.lblSourceDiskSerialNumber.Size = new System.Drawing.Size(30, 13);
-            this.lblSourceDiskSerialNumber.TabIndex = 5;
+            this.lblSourceDiskSerialNumber.TabIndex = 2;
             this.lblSourceDiskSerialNumber.Text = "S/N:";
             // 
             // btnCopyLog
@@ -103,7 +103,7 @@ namespace RawDiskCopier
             this.btnCopyLog.Location = new System.Drawing.Point(487, 75);
             this.btnCopyLog.Name = "btnCopyLog";
             this.btnCopyLog.Size = new System.Drawing.Size(75, 23);
-            this.btnCopyLog.TabIndex = 7;
+            this.btnCopyLog.TabIndex = 8;
             this.btnCopyLog.Text = "Copy Log";
             this.btnCopyLog.UseVisualStyleBackColor = true;
             this.btnCopyLog.Click += new System.EventHandler(this.btnCopyLog_Click);
@@ -114,7 +114,7 @@ namespace RawDiskCopier
             this.lblPosition.Location = new System.Drawing.Point(3, 36);
             this.lblPosition.Name = "lblPosition";
             this.lblPosition.Size = new System.Drawing.Size(47, 13);
-            this.lblPosition.TabIndex = 7;
+            this.lblPosition.TabIndex = 1;
             this.lblPosition.Text = "Position:";
             // 
             // lblSpeed
@@ -123,7 +123,7 @@ namespace RawDiskCopier
             this.lblSpeed.Location = new System.Drawing.Point(3, 16);
             this.lblSpeed.Name = "lblSpeed";
             this.lblSpeed.Size = new System.Drawing.Size(41, 13);
-            this.lblSpeed.TabIndex = 8;
+            this.lblSpeed.TabIndex = 0;
             this.lblSpeed.Text = "Speed:";
             // 
             // groupProgress
@@ -134,7 +134,7 @@ namespace RawDiskCopier
             this.groupProgress.Location = new System.Drawing.Point(6, 100);
             this.groupProgress.Name = "groupProgress";
             this.groupProgress.Size = new System.Drawing.Size(173, 74);
-            this.groupProgress.TabIndex = 8;
+            this.groupProgress.TabIndex = 9;
             this.groupProgress.TabStop = false;
             this.groupProgress.Text = "Source Disk";
             // 
@@ -144,7 +144,7 @@ namespace RawDiskCopier
             this.lblUnrecoveredSectors.Location = new System.Drawing.Point(3, 56);
             this.lblUnrecoveredSectors.Name = "lblUnrecoveredSectors";
             this.lblUnrecoveredSectors.Size = new System.Drawing.Size(111, 13);
-            this.lblUnrecoveredSectors.TabIndex = 9;
+            this.lblUnrecoveredSectors.TabIndex = 2;
             this.lblUnrecoveredSectors.Text = "Unrecovered Sectors:";
             // 
             // pictureBoxLegend
@@ -162,7 +162,7 @@ namespace RawDiskCopier
             this.groupLegend.Location = new System.Drawing.Point(184, 100);
             this.groupLegend.Name = "groupLegend";
             this.groupLegend.Size = new System.Drawing.Size(173, 74);
-            this.groupLegend.TabIndex = 9;
+            this.groupLegend.TabIndex = 10;
             this.groupLegend.TabStop = false;
             this.groupLegend.Text = "Legend";
             // 
@@ -172,7 +172,7 @@ namespace RawDiskCopier
             this.lblSourceDisk.Location = new System.Drawing.Point(4, 11);
             this.lblSourceDisk.Name = "lblSourceDisk";
             this.lblSourceDisk.Size = new System.Drawing.Size(68, 13);
-            this.lblSourceDisk.TabIndex = 12;
+            this.lblSourceDisk.TabIndex = 0;
             this.lblSourceDisk.Text = "Source Disk:";
             // 
             // lblTargetDisk
@@ -181,7 +181,7 @@ namespace RawDiskCopier
             this.lblTargetDisk.Location = new System.Drawing.Point(4, 45);
             this.lblTargetDisk.Name = "lblTargetDisk";
             this.lblTargetDisk.Size = new System.Drawing.Size(65, 13);
-            this.lblTargetDisk.TabIndex = 13;
+            this.lblTargetDisk.TabIndex = 3;
             this.lblTargetDisk.Text = "Target Disk:";
             // 
             // comboTargetDisk
@@ -192,7 +192,7 @@ namespace RawDiskCopier
             this.comboTargetDisk.Location = new System.Drawing.Point(97, 42);
             this.comboTargetDisk.Name = "comboTargetDisk";
             this.comboTargetDisk.Size = new System.Drawing.Size(260, 21);
-            this.comboTargetDisk.TabIndex = 2;
+            this.comboTargetDisk.TabIndex = 4;
             this.comboTargetDisk.SelectedIndexChanged += new System.EventHandler(this.comboTargetDisk_SelectedIndexChanged);
             // 
             // lblTargetDiskSerialNumber
@@ -201,7 +201,7 @@ namespace RawDiskCopier
             this.lblTargetDiskSerialNumber.Location = new System.Drawing.Point(366, 45);
             this.lblTargetDiskSerialNumber.Name = "lblTargetDiskSerialNumber";
             this.lblTargetDiskSerialNumber.Size = new System.Drawing.Size(30, 13);
-            this.lblTargetDiskSerialNumber.TabIndex = 15;
+            this.lblTargetDiskSerialNumber.TabIndex = 5;
             this.lblTargetDiskSerialNumber.Text = "S/N:";
             // 
             // chkMaximizeDataRecovery
@@ -210,7 +210,7 @@ namespace RawDiskCopier
             this.chkMaximizeDataRecovery.Location = new System.Drawing.Point(6, 15);
             this.chkMaximizeDataRecovery.Name = "chkMaximizeDataRecovery";
             this.chkMaximizeDataRecovery.Size = new System.Drawing.Size(167, 17);
-            this.chkMaximizeDataRecovery.TabIndex = 16;
+            this.chkMaximizeDataRecovery.TabIndex = 0;
             this.chkMaximizeDataRecovery.Text = "Maximize data recovery (slow)";
             this.toolTipMain.SetToolTip(this.chkMaximizeDataRecovery, "If a bulk read operation fails due to damaged sectors, attempt reading sector by " +
                     "sector ");
@@ -224,7 +224,7 @@ namespace RawDiskCopier
             this.groupOptions.Location = new System.Drawing.Point(362, 100);
             this.groupOptions.Name = "groupOptions";
             this.groupOptions.Size = new System.Drawing.Size(200, 74);
-            this.groupOptions.TabIndex = 17;
+            this.groupOptions.TabIndex = 11;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
             // 
@@ -236,7 +236,7 @@ namespace RawDiskCopier
             this.chkWriteZeros.Location = new System.Drawing.Point(6, 35);
             this.chkWriteZeros.Name = "chkWriteZeros";
             this.chkWriteZeros.Size = new System.Drawing.Size(192, 17);
-            this.chkWriteZeros.TabIndex = 18;
+            this.chkWriteZeros.TabIndex = 1;
             this.chkWriteZeros.Text = "Write zeros if sector is unrecovered";
             this.toolTipMain.SetToolTip(this.chkWriteZeros, "If the source sector was not recovered, zero out the target sector (instead of le" +
                     "aving it as is)");
@@ -248,10 +248,11 @@ namespace RawDiskCopier
             this.chkInvalidateWindowsCache.Location = new System.Drawing.Point(6, 55);
             this.chkInvalidateWindowsCache.Name = "chkInvalidateWindowsCache";
             this.chkInvalidateWindowsCache.Size = new System.Drawing.Size(169, 17);
-            this.chkInvalidateWindowsCache.TabIndex = 17;
+            this.chkInvalidateWindowsCache.TabIndex = 2;
             this.chkInvalidateWindowsCache.Text = "Notify Windows on completion";
             this.toolTipMain.SetToolTip(this.chkInvalidateWindowsCache, "Invalidate the cached partition table and re-enumerates the device on completion");
             this.chkInvalidateWindowsCache.UseVisualStyleBackColor = true;
+            // 
             // openVirtualDiskFileDialog
             // 
             this.openVirtualDiskFileDialog.FileName = "*.vhd";
