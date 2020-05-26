@@ -31,6 +31,8 @@ namespace RawDiskCopier
         
         public MainForm()
         {
+            // Make the GUI ignore the DPI setting
+            Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
             InitializeComponent();
             WinFormsUtils.SetFixedClientSize(this, 568, 183);
             this.Text += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
