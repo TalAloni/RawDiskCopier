@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2018 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
+/* Copyright (C) 2016-2020 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
  * 
  * You can redistribute this program and/or modify it under the terms of
  * the GNU Lesser Public License as published by the Free Software Foundation,
@@ -32,6 +32,7 @@ namespace RawDiskCopier
         public MainForm()
         {
             InitializeComponent();
+            WinFormsUtils.SetFixedClientSize(this, 568, 183);
             this.Text += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
         }
 

@@ -54,6 +54,7 @@
     </EmbeddedResource>
     <None Include="ILMerge\ILMerge.bat" />
     <Compile Include="UIHelper.cs" />
+    <Compile Include="Utilities\WinFormsUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DynamicDiskPartitioner\DiskAccessLibrary\DiskAccessLibrary.csproj">
