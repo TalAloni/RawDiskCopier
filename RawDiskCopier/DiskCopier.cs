@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using DiskAccessLibrary;
+using DiskAccessLibrary.Win32;
 using Utilities;
 
 namespace RawDiskCopier
