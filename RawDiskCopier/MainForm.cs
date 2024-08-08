@@ -359,7 +359,7 @@ namespace RawDiskCopier
 
             if (targetDisk is PhysicalDisk)
             {
-                DialogResult dialogResult = MessageBox.Show("The copy operation will erase all existing data on the selected disk, Are you sure?", "Warning", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("The copy operation will erase all existing data on the selected target disk, Are you sure?", "Warning", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.No)
                 {
                     return;
